@@ -1,80 +1,69 @@
-# 🛠️ Titanic Survival Prediction - Logistic Regression Project
+# 📈 Tesla Stock Price Prediction using LSTM
 
-This project aims to predict the survival of passengers aboard the Titanic using a **Logistic Regression** model. It involves **structured data preprocessing**, **exploratory data analysis**, **feature engineering**, and **model evaluation** – all implemented in Python with libraries such as **Pandas**, **Seaborn**, **Matplotlib**, and **Scikit-learn**.
-
-## 📌 Project Overview
-
-The Titanic dataset is a classic machine learning dataset used for binary classification problems. In this project, we:
-- Cleaned and preprocessed the dataset
-- Conducted exploratory data analysis (EDA) to identify important features
-- Converted categorical variables into numerical format
-- Built a logistic regression model to predict survival
-- Evaluated the model using accuracy and other performance metrics
-
-## 📋 Step-by-Step Workflow
-
-### 1️⃣ Data Import & Inspection
-- Loaded the dataset using **Pandas**
-- Explored the dataset using `.head()`, `.info()`, and `.describe()` to understand structure, null values, and data types
-
-### 2️⃣ Data Cleaning
-- **Dropped** the `Cabin` column due to excessive missing values
-- **Filled** missing values in the `Age` column with the **mean**
-- **Filled** missing values in the `Embarked` column with the **mode**
-
-### 3️⃣ Exploratory Data Analysis (EDA)
-- Visualized key relationships using **Seaborn bar plots**
-- Analyzed survival rates based on:
-  - **Gender** (`Sex`)
-  - **Passenger Class** (`Pclass`)
-  - **Embarkation Port** (`Embarked`)
-
-### 4️⃣ Feature Engineering & Encoding
-- Converted **categorical columns** (`Sex`, `Embarked`) into **numerical values**
-  - Example: Male → 0, Female → 1
-- **Removed irrelevant columns**: `PassengerId`, `Name`, `Ticket` which do not contribute to prediction
-
-### 5️⃣ Data Splitting
-- Divided the dataset into:
-  - **Training set**: 80%
-  - **Testing set**: 20%
-- Used `train_test_split` from **Scikit-learn**
-
-### 6️⃣ Model Building & Evaluation
-- Built a **Logistic Regression model** using `sklearn.linear_model`
-- Trained the model on the training set
-- Predicted on the testing set
-- Evaluated the model using **accuracy** as the key metric
-
-## ✅ Final Outcome
-
-A fully functional **Logistic Regression model** that can effectively predict whether a passenger survived the Titanic disaster based on relevant features such as age, gender, class, and embarkation port.
+This project demonstrates how to build a **Long Short-Term Memory (LSTM)** model using **Keras** to predict Tesla's stock closing prices based on historical data.
 
 ---
 
-## 💡 Tools & Technologies Used
-- **Python**
-- **Pandas** – data manipulation
-- **NumPy** – numerical operations
-- **Seaborn & Matplotlib** – visualization
-- **Scikit-learn** – model building and evaluation
+## 🧠 Project Objective
+
+The main objective is to:
+
+- Load historical Tesla stock price data
+- Preprocess and normalize the data
+- Create time-series sequences for the LSTM model
+- Train the LSTM neural network
+- Predict and visualize future stock prices
 
 ---
 
-## 📈 Results & Insights
+## 📂 Dataset
 
-- Female passengers had a higher survival rate
-- Passengers in higher classes were more likely to survive
-- Embarkation port also influenced survival likelihood
+- Dataset used: `TSLA.csv`
+- Source: [Yahoo Finance](https://finance.yahoo.com/)
+- Important feature: `Close` price of the stock
+- The `Date` column is set as the index for time series analysis
 
 ---
 
-## 📁 Folder Structure (Optional)
-```bash
-titanic-logistic-regression/
-├── data/
-│   └── train.csv
-├── notebook/
-│   └── titanic_model.ipynb
-├── README.md
-└── requirements.txt
+## 📌 Key Libraries Used
+
+- `pandas` – Data manipulation
+- `numpy` – Numerical operations
+- `matplotlib` – Visualization
+- `sklearn.preprocessing.MinMaxScaler` – Feature scaling
+- `keras` – Deep learning model (LSTM)
+
+---
+
+## 🧪 Model Architecture
+
+- Model: **Sequential**
+- Layers:
+  - LSTM layer with 50 units
+  - Dense layer with 1 output
+- Loss function: `Mean Squared Error`
+- Optimizer: `Adam`
+- Epochs: `100`
+- Batch size: `32`
+
+---
+
+## 🔁 Data Preprocessing Steps
+
+1. Load and parse the `Date` column
+2. Extract only the `Close` prices
+3. Apply **MinMaxScaler** to scale the data between 0 and 1
+4. Create sequences of `60` days to predict the `61st` day price
+5. Split the dataset into **80% training** and **20% testing**
+
+---
+
+## 🧩 Sequence Function
+
+```python
+def create_sequences(data, seq_length):
+    X, y = [], []
+    for i in range(len(data) - seq_length):
+        X.append(data[i:i+seq_length])
+        y.append(data[i+seq_length])
+    return np.array(X), np.array(y)
